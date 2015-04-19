@@ -1,10 +1,11 @@
 <?php
 
 require_once 'inc/config.inc.php';
-use  'Shortener';
+require_once 'inc/Vendor/Test/Shortener.php';
+use Vendor\Test;
 
 if (isset($_REQUEST['shortcode'])) {
-	$api = new Shortener();
+	$api = new Vendor\Test\Shortener();
 	if (!$api->redirectToUrl($_REQUEST['shortcode'])) {
 		header("HTTP/1.0 404 Not Found");
 		include '404.php';

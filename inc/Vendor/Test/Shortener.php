@@ -171,7 +171,7 @@ class Shortener {
 		$this->recordClicks($id);
 		
 		header("Location: " . $check['url']);
-
+		exit();
 	}
 	
 	public function showCreated($min)
