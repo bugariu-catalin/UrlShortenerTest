@@ -144,7 +144,7 @@ class Shortener {
 			$clicks = $check['clicks'];
 			$status = $check['status'];
 		}
-		$created = 60*24*7;
+
 		$result = array(
 			'id' => $id,
 			'shortcode' => $this->generateShortcode($id),
@@ -179,10 +179,10 @@ class Shortener {
 		if ($min<60) {
 			return "$min minutes";			
 		} else if ($min>=60 && $min<1440) {
-			$h = $min / 60;
+			$h = floor($min / 60);
 			return "$h hours";
 		} else if ($min>=1440) {
-			$d = $min / 1440;
+			$d = floor($min / 1440);
 			return "$d days";
 		}		
 	}
