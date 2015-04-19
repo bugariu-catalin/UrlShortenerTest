@@ -1,11 +1,12 @@
 <?php
 
 require_once 'inc/config.inc.php';
-require_once 'inc/shortener.inc.php';
+require_once 'inc/Vendor/Test/Shortener.php';
+use Vendor\Test;
 
 $result = array();
 if (isset($_REQUEST['url'])) {
-	$api = new Shortener();
+	$api = new Vendor\Test\Shortener();
 	$data = $api->getShortcode($_REQUEST['url']);
 	$errors = $api->getErrors();
 	if (!$errors) {
@@ -19,5 +20,3 @@ if (isset($_REQUEST['url'])) {
 }
 
 echo json_encode($result);
-
-?>

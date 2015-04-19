@@ -1,4 +1,7 @@
 <?php
+namespace Vendor\Test;
+
+use PDO;
 
 class Shortener {
 
@@ -7,11 +10,13 @@ class Shortener {
 	
 	protected static $chars = '123456789abcdefghijklmnopqrstuvxyzwABCDEFGHIJKLMNOPQRSTUVXYZW';
 	
-	function __construct() {
+	function __construct()
+	{
 		$this->dbConnect();
 	}
 	
-	protected function dbConnect() {
+	protected function dbConnect()
+	{
 		try {
 			$this->db = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DATABASE, DB_USER, DB_PASS);
 			$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -20,17 +25,20 @@ class Shortener {
 		}
 	}
 	
-	public function validateUrl( $url ) {
+	public function validateUrl($url)
+	{
 		if (empty($url)) return false;
 		
 		return filter_var($url, FILTER_VALIDATE_URL);			
 	}
 	
-	public function validateShortcode ( $shortcode ) {
+	public function validateShortcode($shortcode)
+	{
 		if (preg_match("/^([" . self::$chars . "]+)$/",$shortcode)) return true; else return false;
 	}
 	
-	public function urlExists( $url ) {
+	public function urlExists($url)
+	{
 		try {
 			$url_hash = sha1($url);
 			$stmt = $this->db->prepare("SELECT id, TIMESTAMPDIFF(MINUTE,created,now()) as created, url, clicks, status FROM `url` WHERE url_hash = :url_hash LIMIT 1");
@@ -43,7 +51,8 @@ class Shortener {
 		}
 	}
 
-	public function getUrlById( $id ) {
+	public function getUrlById($id)
+	{
 		try {
 			$url_hash = sha1($url);
 			$stmt = $this->db->prepare("SELECT `url` FROM `url` WHERE id = :id LIMIT 1");
@@ -56,7 +65,8 @@ class Shortener {
 		}
 	}
 	
-	private function insertUrl( $url ) {
+	private function insertUrl($url)
+	{
 		try {
 			$url_hash = sha1($url);
 			$stmt = $this->db->prepare("INSERT INTO `url` SET url_hash = :url_hash, url = :url, status = 1 ");
@@ -70,7 +80,8 @@ class Shortener {
 		}	
 	}
 
-	private function recordClicks( $id ) {
+	private function recordClicks($id)
+	{
 		try {
 			$stmt = $this->db->prepare("UPDATE `url` SET clicks = clicks+1 WHERE id = :id LIMIT 1");
 			$stmt->bindParam(':id', $id);
@@ -84,7 +95,8 @@ class Shortener {
 	
 	//input  = [1, 18446744073709551615]
 	//output = [2112, qRru42hdPcy]
-	private function generateShortcode( $id ) {
+	private function generateShortcode($id)
+	{
 		$result = '';
 		
 		$base = strlen( self::$chars );
@@ -99,7 +111,8 @@ class Shortener {
 		return MAIN_URL . $result;
 	}
 	
-	private function decodeShortcode( $shortcode ) {
+	private function decodeShortcode($shortcode)
+	{
 		$base = strlen( self::$chars );
 		$start = pow($base,3);
 		
@@ -111,7 +124,8 @@ class Shortener {
 		return $result-$start;
 	}
 	
-	public function getShortcode( $url ) {
+	public function getShortcode($url)
+	{
 		
 		if (!$this->validateUrl($url)) {
 			$this->errors[] = 'Invalid url!';
@@ -143,7 +157,8 @@ class Shortener {
 		return $result;
 	}
 	
-	public function redirectToUrl( $shortcode ) {
+	public function redirectToUrl($shortcode)
+	{
 		
 		if (!$this->validateShortcode($shortcode)) return false;
 
@@ -159,7 +174,8 @@ class Shortener {
 
 	}
 	
-	public function showCreated( $min ) {
+	public function showCreated($min)
+	{
 		if ($min<60) {
 			return "$min minutes";			
 		} else if ($min>=60 && $min<1440) {
@@ -171,7 +187,8 @@ class Shortener {
 		}		
 	}
 	
-	public function getErrors() {
+	public function getErrors()
+	{
 		if (sizeof($this->errors)==0) {
 			return false;
 		} else {
@@ -179,5 +196,3 @@ class Shortener {
 		}
 	}
 }
-
-?>

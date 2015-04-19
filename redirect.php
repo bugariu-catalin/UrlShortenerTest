@@ -1,7 +1,7 @@
 <?php
 
 require_once 'inc/config.inc.php';
-require_once 'inc/shortener.inc.php';
+use  'Shortener';
 
 if (isset($_REQUEST['shortcode'])) {
 	$api = new Shortener();
@@ -12,4 +12,3 @@ if (isset($_REQUEST['shortcode'])) {
 } else {
 	header("Location: ./");
 }
-?>
