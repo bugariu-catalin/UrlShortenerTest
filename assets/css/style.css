@@ -1,0 +1,43 @@
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+#result {
+	display:none;
+}
+
+.separator {
+	position: relative;
+	font-size: 12px;
+  font-weight: 600;
+  margin: 16px 0;
+ }
+
+.separator:before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: #e3e6e7;
+  position: absolute;
+  top: 50%;
+}
+
+.separator span {
+  padding: 5px 20px;
+  background: #fff;
+  color: #8f989d;
+  position: relative;
+}
+
+#error-msg {
+	display: none;
+	position:absolute;
+	width: 100%;
+	top: 0px;
+}
